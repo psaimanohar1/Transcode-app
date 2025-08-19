@@ -12,24 +12,24 @@ function Home() {
         {/* Sidebar Navigation */}
         <nav className="w-1/4 bg-gray-800 text-white p-4 flex flex-col">
           {/* Upload Button */}
-          <Link to="/AssetTranscoding/Uploading">
+          <Link to="/assetTranscoding/Uploading">
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 mb-4 mt-10"
           onClick={() => setShowUpload(true)}>
-            Select file
+            Upload
           </button>
           </Link>
 
           {/* Sidebar Links */}
           <ul className="space-y-4 mt-15">
             <li className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg shadow-md cursor-pointer">
-              <Link to="/AssetTranscoding/Information">Information</Link>
+              <Link to="/assetTranscoding/Information">Information</Link>
             </li>
             <li className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg shadow-md cursor-pointer">
-              <Link to="/AssetTranscoding/Transcode">Transcoded</Link>
+              <Link to="/assetTranscoding/Transcode">Transcoded</Link>
             </li>
             <li className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg shadow-md cursor-pointer">
-              <Link to="/AssetTranscoding/Video">Video</Link>
+              <Link to="/assetTranscoding/Video">Video</Link>
             </li>
           </ul>
         </nav>

@@ -1,38 +1,37 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import './App.css'
-import { Button } from './components/ui/button';
+import './App.css';
 import Home from './Home';
-import Information from './Information.jsx';
-// import Transcoding from './Transcoding.jsx';
-import Video from './Video.jsx';
+import Information from './Information';
+import Video from './Video';
 import Transcode from './Transcode';
-import { Outlet } from 'react-router-dom'
 import Uploading from './Uploading';
 
+import { useState } from 'react';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <>
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/AssetTranscoding" replace />} />
 
-        <Route path="/AssetTranscoding" element={<Home />}> 
-          <Route path="Information" element={<Information />} /> 
-          <Route path="Transcode" element={<Transcode />} /> 
-          <Route path="Video" element={<Video />} /> 
-          <Route path='uploading' element={<Uploading/>} />
-        </Route>
+        {/* Login page
+        <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path="/signup" element={<Signup setIsLoggedIn={setIsLoggedIn} />} /> */}
 
-        
+          <Route path="/assetTranscoding" element={<Home />}>
+            <Route index element={<div>Select an option from the sidebar.</div>} />
+            <Route path="Information" element={<Information />} />
+            <Route path="Transcode" element={<Transcode />} />
+            <Route path="Video" element={<Video />} />
+            <Route path="Uploading" element={<Uploading />} />
+          </Route>
+
+        {/* Fallback */}
         <Route path="*" element={<h1>Page Not Found</h1>} />
       </Routes>
     </Router>
-      
-      {/* <Button>hi</Button>   */}
-    </>
-  )
+  );
 }
 
 export default App;
