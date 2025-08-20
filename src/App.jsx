@@ -18,7 +18,8 @@ function App() {
         {/* Login page
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/signup" element={<Signup setIsLoggedIn={setIsLoggedIn} />} /> */}
-
+          
+          <Route path="/" element={<Navigate to="/assetTranscoding" replace />} />
           <Route path="/assetTranscoding" element={<Home />}>
             <Route index element={<div>Select an option from the sidebar.</div>} />
             <Route path="Information" element={<Information />} />

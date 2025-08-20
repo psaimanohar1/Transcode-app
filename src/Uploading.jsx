@@ -7,7 +7,7 @@ function Uploading() {
     setSelectedFile(e.target.files[0]); // store selected file
   };
 
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     e.preventDefault();
 
     if (!selectedFile) {
@@ -16,7 +16,28 @@ function Uploading() {
     }
 
     // For now just log it. Later you can send it to backend.
-    console.log('Selected file:', selectedFile);
+  //   console.log('Selected file:', selectedFile);
+  // };
+
+  const formData = new FormData();
+  formData.append("file", selectedFile);
+
+   try {
+      const res = await fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData, // no need for headers, browser sets them
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        alert(`Upload successful: ${data.message}`);
+      } else {
+        alert("Upload failed.");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      alert("Error uploading file.");
+    }
   };
 
   return (

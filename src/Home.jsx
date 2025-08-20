@@ -16,7 +16,7 @@ function Home() {
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 mb-4 mt-10"
           onClick={() => setShowUpload(true)}>
-            Upload
+            Select file
           </button>
           </Link>
 
@@ -42,8 +42,7 @@ function Home() {
           {/* Nested Routes */}
           <div className="mt-8">
           
-          {showUpload && <Uploading />}
-            <Outlet /> {/* Render nested routes here */}
+            <Outlet /> 
           </div>
         </main>
       </div>
