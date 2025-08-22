@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 
 function Home() {
   const [showUpload, setShowUpload] = useState(false);
+
+  
   
   return (
     <>
@@ -44,6 +46,9 @@ function Home() {
           
             <Outlet /> 
           </div>
+          {/*Resolution options to which the asset needs to be transcoded. */}
+          <button></button>
+
         </main>
       </div>
     </>
