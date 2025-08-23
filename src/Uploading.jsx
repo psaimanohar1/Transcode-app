@@ -50,13 +50,25 @@ function Uploading() {
     }
   };
 
-  const transcode_options = () => {
-    console.log("transcoding options");
+  const resolution_list = [1080,720,480,360];
+
+  const transcode_options = (resolution) => {
+    const num = parseInt(resolution);   // resolution is a string value returned from the standard_label function
+    const index = resolution_list.indexOf(num);
+    if (index == -1) return [];
+    return resolution_list.slice(index+1) ;   
+  };
+
+  const handleTranscode = () => {
+    console.log("send a post /transcode with selected transcode resolution");
+    console.log("now upload these files back to transcoded in the side bar");
+    
     
   }
 
   return (
-    <div className="bg-white p-6 rounded shadow-md max-w-md mx-auto mt-10">
+    <div className='flex justify-start'>
+    <div className="bg-white p-6 rounded shadow-md max-w-md mt-10">
       <h2 className="text-xl font-semibold mb-4">Upload Your Asset</h2>
 
       <form onSubmit={handleUpload}>
@@ -87,9 +99,20 @@ function Uploading() {
         
       )}
 
-      <button onClick={transcode_options} className='flex-col'>transcode options</button>
- 
+      {resolution && (
+        <p className='flex-col py-3 mt-3'>Available Transcode Options:</p>
 
+      ) }
+
+      {resolution && (
+        <div className='flex my-2 gap-2'>
+        {transcode_options(resolution).map((res) => {
+          return <button key={res} onClick={handleTranscode} className='flex mt-2 gap-1 px-2 py-3 bg-gray-500 rounded-md'>{res}</button>
+        }) }
+      </div>
+      )}
+    
+    </div>
     </div>
   );
 }
