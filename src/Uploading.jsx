@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
+import React from "react";
+import { useOutletContext } from "react-router-dom";
 
 function Uploading() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [resolution, setResolution] = useState(null);
+  const { selectedFile, setSelectedFile, resolution, setResolution } = useOutletContext();
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+    const file = e.target.files[0];
+    console.log("Selected file:", file); // log selected file
+    setSelectedFile(file);
   };
 
   const handleUpload = async (e) => {
     e.preventDefault();
-
-    if (!selectedFile) {
-      alert('Please select a file first.');
-      return;
-    }
+    if (!selectedFile) return alert("Please select a file first.");
 
     const formData = new FormData();
     formData.append("file", selectedFile);
@@ -28,91 +26,116 @@ function Uploading() {
 
       if (res.ok) {
         const data = await res.json();
-        alert(`Upload successful: ${data.message}`);
-        const [width , height] = data.resolution.split("x").map(Number);
+        console.log("Upload response:", data); // log backend response
+        const [width, height] = data.resolution.split("x").map(Number);
 
-        const standard_label = (width,height) => {
-          if (height >= 1080) return "1080p";
-          if (height >=720) return "720P";
-          if (height >= 480) return "480p";
-          if (height >= 360) return "360p";
-        }
-        const standard_label_resolution = standard_label(width,height);
-        
-        
-        setResolution(standard_label_resolution); // set resolution after successful upload
+        const standard_label = (h) => {
+          if (h >= 1080) return "1080p";
+          if (h >= 720) return "720p";
+          if (h >= 480) return "480p";
+          if (h >= 360) return "360p";
+        };
+
+        const label = standard_label(height);
+        console.log("Standard label resolution:", label); // log computed label
+        setResolution(label);
+        alert(`Upload successful: ${data.message}`);
       } else {
         alert("Upload failed.");
       }
-    } catch (error) {
-      console.error("Error uploading file:", error);
+    } catch (err) {
+      console.error("Error uploading file:", err);
       alert("Error uploading file.");
     }
   };
 
-  const resolution_list = [1080,720,480,360];
+  const resolution_list = [1080, 720, 480, 360];
 
-  const transcode_options = (resolution) => {
-    const num = parseInt(resolution);   // resolution is a string value returned from the standard_label function
+  const transcode_options = (res) => {
+    const num = parseInt(res);
     const index = resolution_list.indexOf(num);
-    if (index == -1) return [];
-    return resolution_list.slice(index+1) ;   
+    console.log("Available transcode options:", resolution_list.slice(index + 1)); // log options
+    return index === -1 ? [] : resolution_list.slice(index + 1);
   };
 
-  const handleTranscode = () => {
-    console.log("send a post /transcode with selected transcode resolution");
-    console.log("now upload these files back to transcoded in the side bar");
-    
-    
-  }
+  const handleTranscode = async (selectedResolution) => {
+    if (!selectedFile) return alert("Please upload a file first!");
+
+    try {
+      const res = await fetch("http://localhost:5000/transcode", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resolution: selectedResolution }),
+      });
+
+      const data = await res.json();
+      console.log("Transcode response:", data); // log response
+      alert(`Transcode request sent: ${data.message}`);
+    } catch (err) {
+      console.error("Error sending transcode request:", err);
+      alert("Error sending transcode request");
+    }
+  };
 
   return (
-    <div className='flex justify-start'>
-    <div className="bg-white p-6 rounded shadow-md max-w-md mt-10">
-      <h2 className="text-xl font-semibold mb-4">Upload Your Asset</h2>
+    <div className="flex justify-start">
+      <div className="bg-white p-6 rounded shadow-md max-w-md mt-10">
+        <h2 className="text-xl font-semibold mb-4">Upload Your Asset</h2>
 
-      <form onSubmit={handleUpload}>
-        <input 
-          type="file" 
-          accept="video/*"
-          onChange={handleFileChange}
-          className="mb-4"
-        />
-        <button 
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Upload
-        </button>
-      </form>
+        <form onSubmit={handleUpload}>
+          <input
+            type="file"
+            accept="video/*"
+            onChange={handleFileChange}
+            className="mb-4"
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Upload
+          </button>
+        </form>
 
-      {selectedFile && (
-        <p className="mt-4 text-sm text-gray-700">
-          Selected file: <strong>{selectedFile.name}</strong>
-        </p>
-      )}
-
-      {resolution && (
-        <p className="mt-2 text-sm text-gray-700">
-          Resolution: <strong>{resolution}</strong>
+        {selectedFile && (
+          <p className="mt-4 text-sm text-gray-700">
+            Selected file: <strong>{selectedFile.name}</strong>
           </p>
-        
-      )}
+        )}
 
-      {resolution && (
-        <p className='flex-col py-3 mt-3'>Available Transcode Options:</p>
+        {selectedFile && (
+          <video
+            className="w-96 h-56 rounded-lg shadow-lg"
+            controls
+            src={URL.createObjectURL(selectedFile)}
+          >
+            Your browser does not support the video tag.
+          </video>
+        )}
 
-      ) }
+        {resolution && (
+          <p className="mt-2 text-sm text-gray-700">
+            Resolution: <strong>{resolution}</strong>
+          </p>
+        )}
 
-      {resolution && (
-        <div className='flex my-2 gap-2'>
-        {transcode_options(resolution).map((res) => {
-          return <button key={res} onClick={handleTranscode} className='flex mt-2 gap-1 px-2 py-3 bg-gray-500 rounded-md'>{res}</button>
-        }) }
+        {resolution && (
+          <>
+            <p className="flex-col py-3 mt-3">Available Transcode Options:</p>
+            <div className="flex my-2 gap-2">
+              {transcode_options(resolution).map((r) => (
+                <button
+                  key={r}
+                  onClick={() => handleTranscode(r)}
+                  className="flex mt-2 gap-1 px-2 py-3 bg-gray-500 rounded-md"
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </div>
-      )}
-    
-    </div>
     </div>
   );
 }

@@ -21,7 +21,7 @@ function App() {
           
           <Route path="/" element={<Navigate to="/assetTranscoding" replace />} />
           <Route path="/assetTranscoding" element={<Home />}>
-            <Route index element={<div>Select an option from the sidebar.</div>} />
+            {/* <Route index element={<div>Select an option from the sidebar.</div>} /> */}
             <Route path="Information" element={<Information />} />
             <Route path="Transcode" element={<Transcode />} />
             <Route path="Video" element={<Video />} />

@@ -4,7 +4,7 @@ function Transcode () {
 
     return(
         <>
-        <p>this is Transcode component</p>
+        <p>this is to render the transcoded files component</p>
         
         
         </>
