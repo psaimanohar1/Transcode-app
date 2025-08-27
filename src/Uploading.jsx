@@ -2,7 +2,7 @@ import React from "react";
 import { useOutletContext } from "react-router-dom";
 
 function Uploading() {
-  const { selectedFile, setSelectedFile, resolution, setResolution } = useOutletContext();
+  const { selectedFile, setSelectedFile, resolution, setResolution, outputfile_url,setOutputFileUrl  } = useOutletContext();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -65,11 +65,13 @@ function Uploading() {
       const res = await fetch("http://localhost:5000/transcode", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resolution: selectedResolution }),
+        body: JSON.stringify(
+          { resolution: selectedResolution,file_name: selectedFile.name }),
       });
 
       const data = await res.json();
       console.log("Transcode response:", data); // log response
+      
       alert(`Transcode request sent: ${data.message}`);
     } catch (err) {
       console.error("Error sending transcode request:", err);

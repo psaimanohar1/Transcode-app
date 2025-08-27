@@ -5,6 +5,7 @@ import Uploading from './Uploading';
 function Home() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [resolution, setResolution] = useState(null);
+  cosnt [outputfile_url , setOutputFileUrl] = useState(null);
 
   return (
     <div className="flex h-screen">
@@ -35,7 +36,7 @@ function Home() {
       <main className="flex-1 bg-gray-100 p-6">
         <h2 className="text-2xl font-semibold">Welcome to Asset Transcoding</h2>
         <div className="mt-8">
-          <Outlet context={{ selectedFile, setSelectedFile, resolution, setResolution }} />
+          <Outlet context={{ selectedFile, setSelectedFile, resolution, setResolution, outputfile_url, setOutputFileUrl }} />
         </div>
       </main>
     </div>
