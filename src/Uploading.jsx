@@ -71,7 +71,7 @@ function Uploading() {
 
       const data = await res.json();
       console.log("Transcode response:", data); // log response
-      
+      setOutputFileUrl(`http://localhost:5000${data.output_url_backend}`);
       alert(`Transcode request sent: ${data.message}`);
     } catch (err) {
       console.error("Error sending transcode request:", err);

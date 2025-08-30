@@ -5,7 +5,7 @@ import Uploading from './Uploading';
 function Home() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [resolution, setResolution] = useState(null);
-  cosnt [outputfile_url , setOutputFileUrl] = useState(null);
+  const [outputfile_url , setOutputFileUrl] = useState(null);
 
   return (
     <div className="flex h-screen">
