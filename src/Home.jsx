@@ -6,6 +6,7 @@ function Home() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [resolution, setResolution] = useState(null);
   const [outputfile_url , setOutputFileUrl] = useState(null);
+  const [mediainfo , setMediaInfo] = useState(null);
 
   return (
     <div className="flex h-screen">
@@ -21,14 +22,15 @@ function Home() {
 
         <ul className="space-y-4 mt-15">
           <li className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg shadow-md cursor-pointer">
-            <Link to="/assetTranscoding/Information">Information</Link>
-          </li>
-          <li className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg shadow-md cursor-pointer">
             <Link to="/assetTranscoding/Transcode">Transcoded</Link>
           </li>
           <li className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg shadow-md cursor-pointer">
-            <Link to="/assetTranscoding/Video">Video</Link>
+            <Link to="/assetTranscoding/Information">Information</Link>
           </li>
+          
+          {/* <li className="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg shadow-md cursor-pointer">
+            <Link to="/assetTranscoding/Video">Video</Link>
+          </li> */}
         </ul>
       </nav>
 
@@ -36,7 +38,7 @@ function Home() {
       <main className="flex-1 bg-gray-100 p-6">
         <h2 className="text-2xl font-semibold">Welcome to Asset Transcoding</h2>
         <div className="mt-8">
-          <Outlet context={{ selectedFile, setSelectedFile, resolution, setResolution, outputfile_url, setOutputFileUrl }} />
+          <Outlet context={{ selectedFile, setSelectedFile, resolution, setResolution, outputfile_url, setOutputFileUrl, mediainfo, setMediaInfo }} />
         </div>
       </main>
     </div>

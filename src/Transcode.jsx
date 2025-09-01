@@ -6,7 +6,7 @@ function Transcode () {
 
     return(
         <>
-        <p>this is to render the transcoded files component</p>
+        <p className='p-3 text-black'>Transcoded video to resolution </p>
         
             <video src={outputfile_url}
             controls className='h-auto w-96'></video>

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
 function Uploading() {
-  const { selectedFile, setSelectedFile, resolution, setResolution, outputfile_url,setOutputFileUrl  } = useOutletContext();
+  const { selectedFile, setSelectedFile, resolution, setResolution, outputfile_url,setOutputFileUrl, mediainfo, setMediaInfo  } = useOutletContext();
+  
+  const [open, setOpen] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -28,6 +30,13 @@ function Uploading() {
         const data = await res.json();
         console.log("Upload response:", data); // log backend response
         const [width, height] = data.resolution.split("x").map(Number);
+        setMediaInfo(data.mediaInfo_backend);
+        // console.log(mediainfo);
+        
+        // setting up the state for mediainfo.
+        // mediaInfo_backend:  - res defined in the backend.
+
+                
 
         const standard_label = (h) => {
           if (h >= 1080) return "1080p";
@@ -72,6 +81,7 @@ function Uploading() {
       const data = await res.json();
       console.log("Transcode response:", data); // log response
       setOutputFileUrl(`http://localhost:5000${data.output_url_backend}`);
+      
       alert(`Transcode request sent: ${data.message}`);
     } catch (err) {
       console.error("Error sending transcode request:", err);
@@ -81,7 +91,7 @@ function Uploading() {
 
   return (
     <div className="flex justify-start">
-      <div className="bg-white p-6 rounded shadow-md max-w-md mt-10">
+      <div className="bg-white p-2 rounded shadow-md max-w-md mt-2">
         <h2 className="text-xl font-semibold mb-4">Upload Your Asset</h2>
 
         <form onSubmit={handleUpload}>
@@ -120,7 +130,8 @@ function Uploading() {
             Resolution: <strong>{resolution}</strong>
           </p>
         )}
-
+        
+        <div className="flex-col">
         {resolution && (
           <>
             <p className="flex-col py-3 mt-3">Available Transcode Options:</p>
@@ -135,8 +146,20 @@ function Uploading() {
                 </button>
               ))}
             </div>
+            
+            <button onClick={() => setOpen(!open)} className="h-10 w-20 rounded-md bg-slate-400">MediaInfo {open ? "⇩" : "⇧"}</button>
+            {open && (
+              <pre className="mt-4 p-2 bg-gray-100 rounded max-h-64 overflow-auto">
+              {JSON.stringify(mediainfo, null, 2)}
+              </pre>
+
+            ) }
           </>
-        )}
+        )
+        }
+        </div>
+
+        
       </div>
     </div>
   );
