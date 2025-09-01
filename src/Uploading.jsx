@@ -69,6 +69,7 @@ function Uploading() {
 
   const handleTranscode = async (selectedResolution) => {
     if (!selectedFile) return alert("Please upload a file first!");
+    alert(`Transcoding started to convert to ${selectedResolution}`)
 
     try {
       const res = await fetch("http://localhost:5000/transcode", {
@@ -77,6 +78,7 @@ function Uploading() {
         body: JSON.stringify(
           { resolution: selectedResolution,file_name: selectedFile.name }),
       });
+      
 
       const data = await res.json();
       console.log("Transcode response:", data); // log response
@@ -88,6 +90,23 @@ function Uploading() {
       alert("Error sending transcode request");
     }
   };
+
+  // const testing_route = async () => {
+  //   console.log("clicked button");
+    
+  //   try{
+  //     const res = await fetch("http://localhost:5000/testing" ,{
+  //       method:"POST",
+  //       headers : {"Content-Type": "application/json"},
+  //       body: JSON.stringify({"message": "testing route from the front-end"})
+  //   });
+
+  //     const testing_data = await res.json();
+  //     console.log(testing_data);
+  //   }catch(err){
+  //     console.log(`error while sending the post request ${err.message}`);
+       
+  //   }};
 
   return (
     <div className="flex justify-start">
@@ -130,6 +149,8 @@ function Uploading() {
             Resolution: <strong>{resolution}</strong>
           </p>
         )}
+
+        {/* <button onClick={() => testing_route()} className="bg-blue-500 h-10 w-25" > testing route</button> */}
         
         <div className="flex-col">
         {resolution && (
@@ -147,13 +168,14 @@ function Uploading() {
               ))}
             </div>
             
-            <button onClick={() => setOpen(!open)} className="h-10 w-20 rounded-md bg-slate-400">MediaInfo {open ? "⇩" : "⇧"}</button>
+            <button onClick={() => setOpen(!open)} className="h-8 w-25 rounded-md bg-slate-400">MediaInfo{open ? "⇧" : "⇩"}</button>
             {open && (
               <pre className="mt-4 p-2 bg-gray-100 rounded max-h-64 overflow-auto">
               {JSON.stringify(mediainfo, null, 2)}
               </pre>
 
             ) }
+
           </>
         )
         }
@@ -161,6 +183,7 @@ function Uploading() {
 
         
       </div>
+      
     </div>
   );
 }

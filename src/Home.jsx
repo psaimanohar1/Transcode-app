@@ -11,7 +11,7 @@ function Home() {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <nav className="w-1/4 bg-gray-800 text-white p-4 flex flex-col">
+      <nav className="w-1/4 bg-gray-800 text-white p-4 flex flex-col h-screen">
         <Link to="/assetTranscoding/Uploading">
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 mb-4 mt-10"
