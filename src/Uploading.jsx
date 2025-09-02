@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
 function Uploading() {
-  const { selectedFile, setSelectedFile, resolution, setResolution, outputfile_url,setOutputFileUrl, mediainfo, setMediaInfo  } = useOutletContext();
+  const { selectedFile, setSelectedFile, resolution, setResolution, outputfile_url,setOutputFileUrl, mediainfo, setMediaInfo, loadingResolution , setLoadingResolution  } = useOutletContext();
+
   
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -71,6 +72,8 @@ function Uploading() {
     if (!selectedFile) return alert("Please upload a file first!");
     alert(`Transcoding started to convert to ${selectedResolution}`)
 
+    setLoadingResolution(selectedResolution);
+
     try {
       const res = await fetch("http://localhost:5000/transcode", {
         method: "POST",
@@ -88,6 +91,8 @@ function Uploading() {
     } catch (err) {
       console.error("Error sending transcode request:", err);
       alert("Error sending transcode request");
+    }finally{
+      setLoadingResolution(null);
     }
   };
 
@@ -161,20 +166,23 @@ function Uploading() {
                 <button
                   key={r}
                   onClick={() => handleTranscode(r)}
-                  className="flex mt-2 gap-1 px-2 py-3 bg-gray-500 rounded-md"
+                  disabled={loadingResolution == r}
+                  className={`flex mt-2 gap-1 px-2 py-3 rounded-md 
+                    ${loadingResolution === r ? "bg-gray-400 cursor-not-allowed" : "bg-gray-500 hover:bg-gray-600"}
+                  `}
                 >
-                  {r}
+                  {loadingResolution == r? "Transcoding...":r}
                 </button>
               ))}
             </div>
             
-            <button onClick={() => setOpen(!open)} className="h-8 w-25 rounded-md bg-slate-400">MediaInfo{open ? "⇧" : "⇩"}</button>
+            {/* <button onClick={() => setOpen(!open)} className="h-8 w-25 rounded-md bg-slate-400">MediaInfo{open ? "⇧" : "⇩"}</button>
             {open && (
               <pre className="mt-4 p-2 bg-gray-100 rounded max-h-64 overflow-auto">
               {JSON.stringify(mediainfo, null, 2)}
               </pre>
 
-            ) }
+            ) } */}
 
           </>
         )
