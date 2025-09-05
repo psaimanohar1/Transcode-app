@@ -1,0 +1,12 @@
+{
+  "freeze": {
+    "thresholdDb": -60,
+    "minDurationSec": 5
+  },
+  "silence": {
+    "thresholdDb": -30,
+    "minDurationSec": 8
+  }
+}
+
+ 
