@@ -5,6 +5,7 @@ import Information from './Information';
 import Video from './Video';
 import Transcode from './Transcode';
 import Uploading from './Uploading';
+import Configuration from './Configuration';
 
 import { useState } from 'react';
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="Transcode" element={<Transcode />} />
             <Route path="Video" element={<Video />} />
             <Route path="Uploading" element={<Uploading />} />
+            <Route path="configs" element={<Configuration/>}></Route>
           </Route>
 
         {/* Fallback */}

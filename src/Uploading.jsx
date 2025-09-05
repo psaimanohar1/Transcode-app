@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
 function Uploading() {
-  const { selectedFile, setSelectedFile, resolution, setResolution, outputfile_url,setOutputFileUrl, mediainfo, setMediaInfo, loadingResolution , setLoadingResolution  } = useOutletContext();
+  const { selectedFile, setSelectedFile, resolution, setResolution, outputfile_url,setOutputFileUrl, mediainfo, setMediaInfo, loadingResolution , setLoadingResolution, qcconfig, setQcConfig  } = useOutletContext();
 
   
   // const [open, setOpen] = useState(false);
+
+  //Fetching the qcconfig from source folder.
+
+  useEffect (() => {
+    fetch("/qccheck.json")
+    .then(res => res.json()).then(config => setQcConfig(config));
+  }, []);
+
+  console.log(qcconfig);
+  
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -113,9 +123,26 @@ function Uploading() {
        
   //   }};
 
+  const HandleQCCheck = async () => {
+    console.log("handle qc function is called")
+    try{
+      const res = await fetch("https://localhost:5000/qccheck", { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          { resolution: selectedResolution,file_name: selectedFile.name }),
+
+        
+      })
+    }catch(e){
+      res.status
+    }
+    
+  };
+
   return (
     <div className="flex justify-start">
-      <div className="bg-white p-2 rounded shadow-md max-w-md mt-2">
+      <div className="bg-white p-2 rounded shadow-md max-w-md">
         <h2 className="text-xl font-semibold mb-4">Upload Your Asset</h2>
 
         <form onSubmit={handleUpload}>
@@ -161,14 +188,14 @@ function Uploading() {
         {resolution && (
           <>
             <p className="flex-col py-3 mt-3">Available Transcode Options:</p>
-            <div className="flex my-2 gap-2">
+            <div className="flex my-1 gap-2">
               {transcode_options(resolution).map((r) => (
                 <button
                   key={r}
                   onClick={() => handleTranscode(r)}
                   disabled={loadingResolution == r}
-                  className={`flex mt-2 gap-1 px-2 py-3 rounded-md 
-                    ${loadingResolution === r ? "bg-gray-400 cursor-not-allowed" : "bg-gray-500 hover:bg-gray-600"}
+                  className={`flex gap-1 px-2 py-3 rounded-md 
+                    ${loadingResolution === r ? "bg-gray-400 cursor-not-allowed" : "bg-gray-300 hover:bg-gray-400"}
                   `}
                 >
                   {loadingResolution == r? "Transcoding...":r}
@@ -187,6 +214,13 @@ function Uploading() {
           </>
         )
         }
+        </div>
+
+        <div className="flex">
+          {resolution &&
+          <button className=" rounded-md bg-gray-300 mt-5 px-2 py-3 text-black hover:bg-gray-400" onClick={() => HandleQCCheck()
+          }>QC Check</button>
+          }
         </div>
 
         
